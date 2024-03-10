@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "930486605289",
+    "project_id": "vehicle-transport-system-70bfa",
+    "storage_bucket": "vehicle-transport-system-70bfa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930486605289:android:dd0a6f0b4018022ea6e778",
+        "android_client_info": {
+          "package_name": "com.example.vehicle_transport_system2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE6RVPiB2y8AD1-o2WNqlIX1uvtK-g-pA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
