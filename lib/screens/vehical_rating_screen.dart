@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vehicle_transport_system2/models/rating.dart';
+import 'package:vehicle_transport_system2/utils/constants.dart';
 import '../models/vehical.dart';
 
 class VehicalRatingScreen extends StatefulWidget {
@@ -41,142 +42,90 @@ class _VehicalRatingScreenState extends State<VehicalRatingScreen> {
       appBar: AppBar(
         title: const Text('Vehical Ratings'),
       ),
-      body: Column(
-        children: [
-          Image.network(
-            widget.vehical.photos[0] as String,
+      body: Container(
+        height: double.infinity,
             width: double.infinity,
-            height: 250,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(height: 5,),
-
-          Expanded(
-            child: StreamBuilder(
-                stream: ratingsRef?.onValue,
-                builder: (context, snapshot){
-
-                  if( snapshot.hasData && !snapshot.hasError){
-
-                    var event = snapshot.data as DatabaseEvent;
-
-                    var snapshot2 = event.snapshot.value;
-                    if (snapshot2 == null) {
-                      // No ratings in RTDB
-                      return TotalRatingWidget(averageRatings: averageRating, totalRatings: totalRatings);
-
-                    }else{
-
-                      // loop through ratings for current hostel
-
-                      Map<String, dynamic> map =
-                      Map<String, dynamic>.from(snapshot2 as Map);
-
-
-                      List<Rating> ratingList = [];
-                      for (var ratingMap in map.values) {
-                        Rating rating =
-                        Rating.fromMap(Map<String, dynamic>.from(ratingMap));
-
-                        ratingList.add(rating);
+            decoration:  const BoxDecoration(
+              gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Constants.bluecolor1, Constants.bluecolor2],
+            ),
+            ),
+        child: Column(
+          children: [
+            Image.network(
+              widget.vehical.photos[0] as String,
+              width: double.infinity,
+              height: 250,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 5,),
+        
+            Expanded(
+              child: StreamBuilder(
+                  stream: ratingsRef?.onValue,
+                  builder: (context, snapshot){
+        
+                    if( snapshot.hasData && !snapshot.hasError){
+        
+                      var event = snapshot.data as DatabaseEvent;
+        
+                      var snapshot2 = event.snapshot.value;
+                      if (snapshot2 == null) {
+                        // No ratings in RTDB
+                        return TotalRatingWidget(averageRatings: averageRating, totalRatings: totalRatings);
+        
+                      }else{
+        
+                        // loop through ratings for current hostel
+        
+                        Map<String, dynamic> map =
+                        Map<String, dynamic>.from(snapshot2 as Map);
+        
+        
+                        List<Rating> ratingList = [];
+                        for (var ratingMap in map.values) {
+                          Rating rating =
+                          Rating.fromMap(Map<String, dynamic>.from(ratingMap));
+        
+                          ratingList.add(rating);
+                        }
+        
+                        averageRating = 0.0;
+        
+                        for( Rating rating in ratingList){
+                          averageRating = averageRating + rating.value;
+                        }
+        
+                        averageRating = averageRating / ratingList.length;
+                        totalRatings = ratingList.length;
+        
+        
+                        return TotalRatingWidget(averageRatings: averageRating, totalRatings: totalRatings);
+        
                       }
-
-                      averageRating = 0.0;
-
-                      for( Rating rating in ratingList){
-                        averageRating = averageRating + rating.value;
-                      }
-
-                      averageRating = averageRating / ratingList.length;
-                      totalRatings = ratingList.length;
-
-
-                      return TotalRatingWidget(averageRatings: averageRating, totalRatings: totalRatings);
-
                     }
-                  }
-                  else{
-                    return const Center(child: CircularProgressIndicator(),);
-                  }
-
-            }),
-          ),
-
-          // Seeker Rating
-          Expanded(child: StreamBuilder(
-
-            stream: ratingsRef?.onValue,
-            builder: (context, snapshot){
-              if( snapshot.hasData && !snapshot.hasError){
-
-                var event = snapshot.data as DatabaseEvent;
-
-                var snapshot2 = event.snapshot.value;
-                if (snapshot2 == null) {
-                  // No ratings in RTDB
-
-                  return Column(
-                    children: [
-                      const Text('Your Rating', style: TextStyle(fontSize: 20),),
-                      RatingBar.builder(
-                        initialRating: yourRatings,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemSize: 30,
-                        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (double rating) async{
-                          // add a new record in ratings
-
-                          print(rating);
-
-                          yourRatings = rating;
-                          String? ratingId = ratingsRef!.push().key;
-                          if( ratingId != null ){
-
-                            await ratingsRef!.child(ratingId).set({
-                              'ratingId': ratingId,
-                              'seekerId': seekerId,
-                              'value': rating,
-                            });
-
-                            Fluttertoast.showToast(msg: 'Thank you for rating vehical');
-                          }else{
-                            Fluttertoast.showToast(msg: 'Try Again Later');
-
-                          }
-
-
-                        },
-                      ),
-                    ],
-                  );
-                }else{
-
-                  // loop through ratings for current user
-                  Map<String, dynamic> map =
-                  Map<String, dynamic>.from(snapshot2 as Map);
-
-
-                  Rating? seekerRating;
-                  for (var ratingMap in map.values) {
-                    Rating rating =
-                    Rating.fromMap(Map<String, dynamic>.from(ratingMap));
-
-                    if (rating.seekerId == seekerId) {
-                      seekerRating = rating;
+                    else{
+                      return const Center(child: CircularProgressIndicator(),);
                     }
-                  }
-
-                  if( seekerRating == null )
-                  {
-                    // current user has not rated yet
-                    // add new rating
+        
+              }),
+            ),
+        
+            // Seeker Rating
+            Expanded(child: StreamBuilder(
+        
+              stream: ratingsRef?.onValue,
+              builder: (context, snapshot){
+                if( snapshot.hasData && !snapshot.hasError){
+        
+                  var event = snapshot.data as DatabaseEvent;
+        
+                  var snapshot2 = event.snapshot.value;
+                  if (snapshot2 == null) {
+                    // No ratings in RTDB
+        
                     return Column(
                       children: [
                         const Text('Your Rating', style: TextStyle(fontSize: 20),),
@@ -194,71 +143,134 @@ class _VehicalRatingScreenState extends State<VehicalRatingScreen> {
                           ),
                           onRatingUpdate: (double rating) async{
                             // add a new record in ratings
-
+        
                             print(rating);
+        
                             yourRatings = rating;
                             String? ratingId = ratingsRef!.push().key;
                             if( ratingId != null ){
-
+        
                               await ratingsRef!.child(ratingId).set({
-                            'ratingId': ratingId,
-                            'seekerId': seekerId,
-                            'value': rating,
-                            });
-
-                            Fluttertoast.showToast(msg: 'Thank you for rating vehical');
+                                'ratingId': ratingId,
+                                'seekerId': seekerId,
+                                'value': rating,
+                              });
+        
+                              Fluttertoast.showToast(msg: 'Thank you for rating vehical');
                             }else{
-                            Fluttertoast.showToast(msg: 'Try Again Later');
-
+                              Fluttertoast.showToast(msg: 'Try Again Later');
+        
                             }
+        
+        
                           },
                         ),
                       ],
                     );
-                  }
-                  else{
-
-                    // user has already rated the hostel
-                    // update is required
-                    yourRatings = seekerRating.value.toDouble();
-                    return Column(
-                      children: [
-                        const Text('Your Rating', style: TextStyle(fontSize: 20),),
-                        RatingBar.builder(
-                          initialRating: yourRatings,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemSize: 30,
-                          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
+                  }else{
+        
+                    // loop through ratings for current user
+                    Map<String, dynamic> map =
+                    Map<String, dynamic>.from(snapshot2 as Map);
+        
+        
+                    Rating? seekerRating;
+                    for (var ratingMap in map.values) {
+                      Rating rating =
+                      Rating.fromMap(Map<String, dynamic>.from(ratingMap));
+        
+                      if (rating.seekerId == seekerId) {
+                        seekerRating = rating;
+                      }
+                    }
+        
+                    if( seekerRating == null )
+                    {
+                      // current user has not rated yet
+                      // add new rating
+                      return Column(
+                        children: [
+                          const Text('Your Rating', style: TextStyle(fontSize: 20),),
+                          RatingBar.builder(
+                            initialRating: yourRatings,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemSize: 30,
+                            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (double rating) async{
+                              // add a new record in ratings
+        
+                              print(rating);
+                              yourRatings = rating;
+                              String? ratingId = ratingsRef!.push().key;
+                              if( ratingId != null ){
+        
+                                await ratingsRef!.child(ratingId).set({
+                              'ratingId': ratingId,
+                              'seekerId': seekerId,
+                              'value': rating,
+                              });
+        
+                              Fluttertoast.showToast(msg: 'Thank you for rating vehical');
+                              }else{
+                              Fluttertoast.showToast(msg: 'Try Again Later');
+        
+                              }
+                            },
                           ),
-                          onRatingUpdate: (double rating) {
-                            // update record in ratings
-                            print(rating);
-
-                            ratingsRef!.child(seekerRating!.ratingId).update(
-                                {
-                                  'value': rating * 1.0
-                                });
-                          },
-                        ),
-                      ],
-                    );
+                        ],
+                      );
+                    }
+                    else{
+        
+                      // user has already rated the hostel
+                      // update is required
+                      yourRatings = seekerRating.value.toDouble();
+                      return Column(
+                        children: [
+                          const Text('Your Rating', style: TextStyle(fontSize: 20),),
+                          RatingBar.builder(
+                            initialRating: yourRatings,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemSize: 30,
+                            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (double rating) {
+                              // update record in ratings
+                              print(rating);
+        
+                              ratingsRef!.child(seekerRating!.ratingId).update(
+                                  {
+                                    'value': rating * 1.0
+                                  });
+                            },
+                          ),
+                        ],
+                      );
+                    }
+        
                   }
-
                 }
-              }
-              else{
-                return const Center(child: CircularProgressIndicator(),);
-              }
-            },
-          ))
-
-        ],
+                else{
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+              },
+            ))
+        
+          ],
+        ),
       ),
     );
   }

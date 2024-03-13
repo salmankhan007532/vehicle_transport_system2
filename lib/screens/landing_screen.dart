@@ -14,75 +14,86 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-             Expanded(
-              child: Center(child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset('assets/icon/Bus.png', width: 300, height: 400,))),
+        child: Container(
+          height: double.infinity,
+            width: double.infinity,
+            decoration:  const BoxDecoration(
+              gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Constants.bluecolor1, Constants.bluecolor2],
             ),
-            Expanded(
-                child: Column(
-              children: [
-                const Text(
-                  'Please Select User Type',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (context) {
-                      return const LoginScreen(
-                          userType: Constants.passanger);
-                    }));
-                  },
-                  style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      )),
-                  child: const Text(
-                    'Passanger',
+            ),
+          child: Column(
+            children: [
+               Expanded(
+                child: Center(child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset('assets/icon/Bus.png', width: 300, height: 400,))),
+              ),
+              Expanded(
+                  child: Column(
+                children: [
+                  const Text(
+                    'Please Select User Type',
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (context) {
-                      return const LoginScreen(userType: Constants.vehicalOwner);
-                    }));
-                  },
-                  style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      )),
-                  child: const Text(
-                    'Vehical Owner',
-                    style: TextStyle(
-                      fontSize: 20,
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushReplacement(MaterialPageRoute(builder: (context) {
+                        return const LoginScreen(
+                            userType: Constants.passanger);
+                      }));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )),
+                    child: const Text(
+                      'Passanger',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ))
-          ],
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushReplacement(MaterialPageRoute(builder: (context) {
+                        return const LoginScreen(userType: Constants.vehicalOwner);
+                      }));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )),
+                    child: const Text(
+                      '    Driver    ',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ))
+            ],
+          ),
         ),
       ),
     );

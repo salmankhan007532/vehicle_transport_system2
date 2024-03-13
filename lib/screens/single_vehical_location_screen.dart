@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vehicle_transport_system2/models/vehical.dart';
+import 'package:vehicle_transport_system2/utils/constants.dart';
 
 class SingleVehicalLocationScreen extends StatefulWidget {
   final Vehical vehical;
@@ -39,20 +40,31 @@ class _SingleVehicalLocationScreenState
       appBar: AppBar(
         title: Text(widget.vehical.vehicalName),
       ),
-      body: GoogleMap(
-        initialCameraPosition: vehicalCameraPosition,
-        markers: {
-          Marker(
-              markerId: MarkerId(widget.vehical.vehicalId),
-              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-              position: vehicalLatLng,
-              infoWindow: InfoWindow(
-                  title: widget.vehical.vehicalName,
-                  snippet: widget.vehical.vehicalNum)),
-        },
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+      body: Container(
+        height: double.infinity,
+            width: double.infinity,
+            decoration:  const BoxDecoration(
+              gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Constants.bluecolor1, Constants.bluecolor2],
+            ),
+            ),
+        child: GoogleMap(
+          initialCameraPosition: vehicalCameraPosition,
+          markers: {
+            Marker(
+                markerId: MarkerId(widget.vehical.vehicalId),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+                position: vehicalLatLng,
+                infoWindow: InfoWindow(
+                    title: widget.vehical.vehicalName,
+                    snippet: widget.vehical.vehicalNum)),
+          },
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:vehicle_transport_system2/utils/constants.dart';
 
 import '../models/facility.dart';
 import '../models/vehical.dart';
@@ -120,436 +121,447 @@ class _UpdateVehicalScreenState extends State<UpdateVehicalScreen> {
       appBar: AppBar(
         title: const Text('Update Vehical Record'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Text(
-                'Vehical Details',
-                style: TextStyle(fontSize: 18),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                controller: _cityController,
-                decoration: InputDecoration(
-                    hintText: 'Enter City Name',
-                    labelText: 'City Name',
-                    prefixIcon: const Icon(Icons.house),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                controller: _hostelNameController,
-                decoration: InputDecoration(
-                    hintText: 'Enter Vehical Name',
-                    labelText: 'Hostel Name',
-                    prefixIcon: const Icon(Icons.edit),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                controller: _ownerNameController,
-                decoration: InputDecoration(
-                    hintText: 'Enter Owner Name',
-                    labelText: 'Owner Name',
-                    prefixIcon: const Icon(Icons.person),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                maxLength: 11,
-                controller: _contactController,
-                decoration: InputDecoration(
-                    hintText: 'Enter Contact Number',
-                    labelText: 'Contact No',
-                    prefixIcon: const Icon(Icons.phone),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _availableSeatsController,
-                decoration: InputDecoration(
-                    hintText: 'Enter Available Seats',
-                    labelText: 'Seats Available',
-                    prefixIcon: const Icon(Icons.bed),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _rentController,
-                decoration: InputDecoration(
-                    hintText: 'Enter Rent per Seat',
-                    labelText: 'Seat Rent',
-                    prefixIcon: const Icon(Icons.format_align_justify),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey),
+      body: Container(
+        height: double.infinity,
+            width: double.infinity,
+            decoration:  const BoxDecoration(
+              gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Constants.bluecolor1, Constants.bluecolor2],
+            ),
+            ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Text(
+                  'Vehical Details',
+                  style: TextStyle(fontSize: 18),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Facilities'),
-                                content: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.8,
-                                  margin: const EdgeInsets.all(20),
-                                  child: StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return ListView.builder(
-                                          itemCount: facilitiesList.length,
-                                          itemBuilder: (context, index) {
-                                            //Facility facility = facilitiesList[index];
-
-                                            return CheckboxListTile(
-                                                title: Text(
-                                                    facilitiesList[index].name),
-                                                value:
-                                                    facilitiesList[index].value,
-                                                onChanged: (isChecked) {
-                                                  print(isChecked);
-                                                  setState(() {
-                                                    facilitiesList[index]
-                                                        .value = isChecked!;
-                                                  });
-                                                });
-                                          });
-                                    },
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-
-                                        setState(() {
-                                          facilities = '';
-                                          for (var facility in facilitiesList) {
-                                            if (facility.value) {
-                                              facilities += '${facility.name},';
-                                            }
-                                          }
-                                        });
-                                      },
-                                      child: const Text('CANCEL')),
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-
-                                        setState(() {
-                                          facilities = '';
-                                          for (var facility in facilitiesList) {
-                                            if (facility.value) {
-                                              facilities += '${facility.name},';
-                                            }
-                                          }
-                                        });
-                                      },
-                                      child: const Text('OK')),
-                                ],
-                              );
-                            });
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Facilities'),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.black45,
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Expanded(child: Text(facilities)),
-                  ],
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _totalRoomsController,
-                decoration: InputDecoration(
-                    hintText: 'Enter Total Rooms',
-                    labelText: 'Total Rooms',
-                    prefixIcon: const Icon(Icons.roofing),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey),
+                TextField(
+                  controller: _cityController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Vehicle No',
+                      labelText: 'Vehival No',
+                      prefixIcon: const Icon(Icons.house),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: _hostelNameController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Vehical Name',
+                      labelText: 'Vhical Name',
+                      prefixIcon: const Icon(Icons.edit),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: _ownerNameController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Driver Name',
+                      labelText: 'Driver Name',
+                      prefixIcon: const Icon(Icons.person),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  maxLength: 11,
+                  controller: _contactController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Contact Number',
+                      labelText: 'Contact No',
+                      prefixIcon: const Icon(Icons.phone),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  controller: _availableSeatsController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Available Seats',
+                      labelText: 'Seats Available',
+                      prefixIcon: const Icon(Icons.bed),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  controller: _rentController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Rent per Seat',
+                      labelText: 'Seat Rent',
+                      prefixIcon: const Icon(Icons.format_align_justify),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  height: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
                         onTap: () {
-                          _pickMultiplesImages();
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Facilities'),
+                                  content: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                    height:
+                                        MediaQuery.of(context).size.height * 0.8,
+                                    margin: const EdgeInsets.all(20),
+                                    child: StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return ListView.builder(
+                                            itemCount: facilitiesList.length,
+                                            itemBuilder: (context, index) {
+                                              //Facility facility = facilitiesList[index];
+        
+                                              return CheckboxListTile(
+                                                  title: Text(
+                                                      facilitiesList[index].name),
+                                                  value:
+                                                      facilitiesList[index].value,
+                                                  onChanged: (isChecked) {
+                                                    print(isChecked);
+                                                    setState(() {
+                                                      facilitiesList[index]
+                                                          .value = isChecked!;
+                                                    });
+                                                  });
+                                            });
+                                      },
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+        
+                                          setState(() {
+                                            facilities = '';
+                                            for (var facility in facilitiesList) {
+                                              if (facility.value) {
+                                                facilities += '${facility.name},';
+                                              }
+                                            }
+                                          });
+                                        },
+                                        child: const Text('CANCEL')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+        
+                                          setState(() {
+                                            facilities = '';
+                                            for (var facility in facilitiesList) {
+                                              if (facility.value) {
+                                                facilities += '${facility.name},';
+                                              }
+                                            }
+                                          });
+                                        },
+                                        child: const Text('OK')),
+                                  ],
+                                );
+                              });
                         },
-                        child: const Text('Vehical Photo - Tap to Select')),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    imagePicked == false
-                        ? const SizedBox.shrink()
-                        : Expanded(
-                            child: GridView.builder(
-                                itemCount: imageFiles!.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 5,
-                                ),
-                                itemBuilder: (context, index) {
-                                  return Image.file(
-                                    imageFiles![index],
-                                    fit: BoxFit.cover,
-                                  );
-                                }),
-                          )
-                    /*
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.photo,
-                                    ),
-                                    title: const Text('From Gallery'),
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                      _pickImageFrom(
-                                          source: ImageSource.gallery);
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.camera_alt,
-                                    ),
-                                    title: const Text('From Camera'),
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                      _pickImageFrom(
-                                          source: ImageSource.camera);
-                                    },
-                                  ),
-                                ],
-                              );
-                            });
-                      },
-                      child: imagePicked
-                          ? Image.file(
-                              imageFile!,
-                              width: double.infinity,
-                              height: 110,
-                              fit: BoxFit.cover,
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Facilities'),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black45,
                             )
-                          : Image.network(
-                              widget.hostel.photos[0] as String,
-                              width: double.infinity,
-                              height: 110,
-                              fit: BoxFit.cover,
-                            ),
-                    ) */
-                  ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(child: Text(facilities)),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () async {
-                      if (validate()) {
-                        if (await NetworkConnection.isNotConnected()) {
-                          Fluttertoast.showToast(
-                              msg:
-                                  'You are Offline\nConnect to Internet and try again');
-                          return;
-                        }
-
-                        ProgressDialog progressDialog = ProgressDialog(
-                          context,
-                          title: const Text('Updating'),
-                          message: const Text('Please wait'),
-                        );
-                        progressDialog.show();
-
-                        if (imagePicked && imageFiles != null) {
-                          // upload image to storage
-                          try {
-                            // var fileName = DateTime.now().toIso8601String();
-                            //
-                            // UploadTask uploadTask = FirebaseStorage.instance
-                            //     .ref()
-                            //     .child('hostel_images')
-                            //     .child(fileName)
-                            //     .putFile(imageFile!);
-                            //
-                            // TaskSnapshot snapshot = await uploadTask;
-                            // String hostelPhotoUrl =
-                            //     await snapshot.ref.getDownloadURL();
-                            // print(hostelPhotoUrl);
-
-
-                            await Future.forEach(imageFiles!, (File image) async {
-
-                              var fileName = 'vehical${Random().nextInt(1000000)}';
-
-                              Reference ref = FirebaseStorage.instance
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  controller: _totalRoomsController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Total Rooms',
+                      labelText: 'Total Rooms',
+                      prefixIcon: const Icon(Icons.roofing),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  height: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            _pickMultiplesImages();
+                          },
+                          child: const Text('Vehical Photo - Tap to Select')),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      imagePicked == false
+                          ? const SizedBox.shrink()
+                          : Expanded(
+                              child: GridView.builder(
+                                  itemCount: imageFiles!.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 5,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return Image.file(
+                                      imageFiles![index],
+                                      fit: BoxFit.cover,
+                                    );
+                                  }),
+                            )
+                      /*
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      leading: const Icon(
+                                        Icons.photo,
+                                      ),
+                                      title: const Text('From Gallery'),
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                        _pickImageFrom(
+                                            source: ImageSource.gallery);
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(
+                                        Icons.camera_alt,
+                                      ),
+                                      title: const Text('From Camera'),
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                        _pickImageFrom(
+                                            source: ImageSource.camera);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                        child: imagePicked
+                            ? Image.file(
+                                imageFile!,
+                                width: double.infinity,
+                                height: 110,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                widget.hostel.photos[0] as String,
+                                width: double.infinity,
+                                height: 110,
+                                fit: BoxFit.cover,
+                              ),
+                      ) */
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        if (validate()) {
+                          if (await NetworkConnection.isNotConnected()) {
+                            Fluttertoast.showToast(
+                                msg:
+                                    'You are Offline\nConnect to Internet and try again');
+                            return;
+                          }
+        
+                          ProgressDialog progressDialog = ProgressDialog(
+                            context,
+                            title: const Text('Updating'),
+                            message: const Text('Please wait'),
+                          );
+                          progressDialog.show();
+        
+                          if (imagePicked && imageFiles != null) {
+                            // upload image to storage
+                            try {
+                              // var fileName = DateTime.now().toIso8601String();
+                              //
+                              // UploadTask uploadTask = FirebaseStorage.instance
+                              //     .ref()
+                              //     .child('hostel_images')
+                              //     .child(fileName)
+                              //     .putFile(imageFile!);
+                              //
+                              // TaskSnapshot snapshot = await uploadTask;
+                              // String hostelPhotoUrl =
+                              //     await snapshot.ref.getDownloadURL();
+                              // print(hostelPhotoUrl);
+        
+        
+                              await Future.forEach(imageFiles!, (File image) async {
+        
+                                var fileName = 'vehical${Random().nextInt(1000000)}';
+        
+                                Reference ref = FirebaseStorage.instance
+                                    .ref()
+                                    .child('vehical_images')
+                                    .child(fileName);
+                                final UploadTask uploadTask = ref.putFile(image);
+                                final TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+                                final url = await taskSnapshot.ref.getDownloadURL();
+                                photos.add(url);
+                              });
+        
+                              print(photos);
+                              // Update Hostel record in RTDB
+        
+                              DatabaseReference vehicalReference = FirebaseDatabase
+                                  .instance
                                   .ref()
-                                  .child('vehical_images')
-                                  .child(fileName);
-                              final UploadTask uploadTask = ref.putFile(image);
-                              final TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
-                              final url = await taskSnapshot.ref.getDownloadURL();
-                              photos.add(url);
-                            });
-
-                            print(photos);
-                            // Update Hostel record in RTDB
-
-                            DatabaseReference vehicalReference = FirebaseDatabase
-                                .instance
-                                .ref()
-                                .child('hostels')
-                                .child(widget.vehical.vehicalId);
-                            //String? hostelId = hostelReference.push().key;
-
-                            Vehical vehical = Vehical(
-                              vehicalId: widget.vehical.vehicalId,
-                              vehicalNum: _cityController.text.trim(),
-                              vehicalName: _hostelNameController.text.trim(),
-                              ownerName: _ownerNameController.text.trim(),
-                              ownerId: widget.vehical.ownerId,
-                              contactNum: _contactController.text.trim(),
-                              availableSeats:
-                                  _availableSeatsController.text.trim(),
-                              seatRent: _rentController.text.trim(),
-                              facilities: facilities,
-                              totalseats: _totalRoomsController.text.trim(),
-                              photos: photos,
-                              //hostelPhotoUrl,
-                              latitude: widget.vehical.latitude,
-                              longitude: widget.vehical.longitude,
-                            );
-
-                            await vehicalReference.update(vehical.toMap());
-
-                            Fluttertoast.showToast(
-                                msg: 'Hostel Record Updated',
-                                backgroundColor: Colors.green);
-                            progressDialog.dismiss();
-                            Navigator.of(context).pop();
-                          } catch (e) {
-                            progressDialog.dismiss();
-
-                            print(e.toString());
-                          }
-                        } else {
-                          // No need of uploading image, user haven't changed photo
-                          try {
-                            // Update Hostel record in RTDB
-
-                            DatabaseReference vehicalReference = FirebaseDatabase
-                                .instance
-                                .ref()
-                                .child('vehical')
-                                .child(widget.vehical.vehicalId);
-                            //String? hostelId = hostelReference.push().key;
-
-                            Vehical hostel = Vehical(
-                              vehicalId: widget.vehical.vehicalId,
-                              vehicalNum: _cityController.text.trim(),
-                              vehicalName: _hostelNameController.text.trim(),
-                              ownerName: _ownerNameController.text.trim(),
-                              ownerId: widget.vehical.ownerId,
-                              contactNum: _contactController.text.trim(),
-                              availableSeats:
-                                  _availableSeatsController.text.trim(),
-                              seatRent: _rentController.text.trim(),
-                              facilities: facilities,
-                              totalseats: _totalRoomsController.text.trim(),
-                              photos: <Object>[],
-                              //widget.hostel.photo,
-                              latitude: widget.vehical.latitude,
-                              longitude: widget.vehical.longitude,
-                            );
-
-                            await vehicalReference.update(hostel.toMap());
-
-                            Fluttertoast.showToast(
-                                msg: 'Vehical Record Updated',
-                                backgroundColor: Colors.green);
-                            progressDialog.dismiss();
-                            Navigator.of(context).pop();
-                          } catch (e) {
-                            progressDialog.dismiss();
+                                  .child('hostels')
+                                  .child(widget.vehical.vehicalId);
+                              //String? hostelId = hostelReference.push().key;
+        
+                              Vehical vehical = Vehical(
+                                vehicalId: widget.vehical.vehicalId,
+                                vehicalNum: _cityController.text.trim(),
+                                vehicalName: _hostelNameController.text.trim(),
+                                ownerName: _ownerNameController.text.trim(),
+                                ownerId: widget.vehical.ownerId,
+                                contactNum: _contactController.text.trim(),
+                                availableSeats:
+                                    _availableSeatsController.text.trim(),
+                                seatRent: _rentController.text.trim(),
+                                facilities: facilities,
+                                totalseats: _totalRoomsController.text.trim(),
+                                photos: photos,
+                                //hostelPhotoUrl,
+                                latitude: widget.vehical.latitude,
+                                longitude: widget.vehical.longitude,
+                              );
+        
+                              await vehicalReference.update(vehical.toMap());
+        
+                              Fluttertoast.showToast(
+                                  msg: 'Vehical Record Updated',
+                                  backgroundColor: Colors.green);
+                              progressDialog.dismiss();
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              progressDialog.dismiss();
+        
+                              print(e.toString());
+                            }
+                          } else {
+                            // No need of uploading image, user haven't changed photo
+                            try {
+                              // Update Hostel record in RTDB
+        
+                              DatabaseReference vehicalReference = FirebaseDatabase
+                                  .instance
+                                  .ref()
+                                  .child('vehical')
+                                  .child(widget.vehical.vehicalId);
+                              //String? hostelId = hostelReference.push().key;
+        
+                              Vehical hostel = Vehical(
+                                vehicalId: widget.vehical.vehicalId,
+                                vehicalNum: _cityController.text.trim(),
+                                vehicalName: _hostelNameController.text.trim(),
+                                ownerName: _ownerNameController.text.trim(),
+                                ownerId: widget.vehical.ownerId,
+                                contactNum: _contactController.text.trim(),
+                                availableSeats:
+                                    _availableSeatsController.text.trim(),
+                                seatRent: _rentController.text.trim(),
+                                facilities: facilities,
+                                totalseats: _totalRoomsController.text.trim(),
+                                photos: <Object>[],
+                                //widget.hostel.photo,
+                                latitude: widget.vehical.latitude,
+                                longitude: widget.vehical.longitude,
+                              );
+        
+                              await vehicalReference.update(hostel.toMap());
+        
+                              Fluttertoast.showToast(
+                                  msg: 'Vehical Record Updated',
+                                  backgroundColor: Colors.green);
+                              progressDialog.dismiss();
+                              Navigator.of(context).pop();
+                            } catch (e) {
+                              progressDialog.dismiss();
+                            }
                           }
                         }
-                      }
-                    },
-                    child: const Text('Update')),
-              ),
-            ],
+                      },
+                      child: const Text('Update')),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -567,18 +579,18 @@ class _UpdateVehicalScreenState extends State<UpdateVehicalScreen> {
 
     if (cityName.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'Please provide city name', backgroundColor: Colors.red);
+          msg: 'Please provide Vehical NO', backgroundColor: Colors.red);
       return false;
     }
     if (hostelName.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'Please provide city name', backgroundColor: Colors.red);
+          msg: 'Please provide Vehical name', backgroundColor: Colors.red);
       return false;
     }
 
     if (ownerName.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'Please provide owner name', backgroundColor: Colors.red);
+          msg: 'Please provide driver name', backgroundColor: Colors.red);
       return false;
     }
 
@@ -602,20 +614,20 @@ class _UpdateVehicalScreenState extends State<UpdateVehicalScreen> {
 
     if (totalRooms.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'Please provide total rooms', backgroundColor: Colors.red);
+          msg: 'Please provide total seats', backgroundColor: Colors.red);
       return false;
     }
 
     RegExp regExp = RegExp(r'[0-9]');
-    if (cityName.contains(regExp)) {
+    if (cityName.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'Invalid City Name', backgroundColor: Colors.red);
+          msg: 'Invalid Vehical No', backgroundColor: Colors.red);
       return false;
     }
 
     if (ownerName.contains(regExp)) {
       Fluttertoast.showToast(
-          msg: 'Invalid Owner Name', backgroundColor: Colors.red);
+          msg: 'Invalid Driver Name', backgroundColor: Colors.red);
       return false;
     }
 
